@@ -24,7 +24,7 @@ class Character:
 		# images = []
 		# for file_name in os.listdir(sprite):
 		# 	image = pygame.image.load(sprite + os.sep + file_name).convert()
-		# 	images.append(image)	
+		# 	images.append(image)
 
 		self.spriteder = pygame.image.load(sprite)
 		self.spriteizq = pygame.transform.flip(self.spriteder, True, False)
@@ -38,6 +38,8 @@ class Character:
 
 	def move(self, d):
 		
+		# TODO limite del techo y piso 
+
 		if d != (0,0):
 			if d.x > 0:
 				self.sprite = self.spriteizq
