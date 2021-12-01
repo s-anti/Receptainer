@@ -8,3 +8,4 @@ class camera():
     def update(self,target):
         self.x = target.x
         self.y = target.y
+#eloctaselacomecuadrada

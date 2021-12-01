@@ -1,77 +1,72 @@
 import pygame, math
 from colors import *
 
-pygame.init()
 
-# TODO: eliminar, uso exclusivo de prueba, manejar desde main o cÃ¡mara
-width, height = 1500 , 800                          
-screen = pygame.display.set_mode((width, height))   # LA PANTALLA
-pygame.display.set_caption("Personaje")             # Titulo
 
-clock = pygame.time.Clock()
-
+class Sprite:
+	def __init__(self, x, y, width, height):
+		self.x = x
+		self.y = y
+		self.dx = 0
+		self.dy = 0
+		self.width = width
+		self.height = height
+		self.color = red
+		self.friction = 0,9
 
 class Character:
 	def __init__(self, sprite):
-		self.sprite = pygame.image.load(sprite)
+		self.spriteder = pygame.image.load(sprite)
+		self.spriteizq = pygame.transform.flip(self.spriteder, True, False)
+		self.sprite = self.spriteder
 		self.rect = self.sprite.get_rect()
-		self.speed = 15
+		self.speed = 0
+		self.acceleration = 3
+		
+		self.max_speed = 14
+		
 
 	def move(self, d):
 		
-		if d.xy != (0,0):
-			d = d.normalize()
+		if d != (0,0):
+			if d.x > 0:
+				self.sprite = self.spriteizq
+			else: 
+				self.sprite = self.spriteder
 
+			d = d.normalize()
+			self.speed += self.acceleration
+			self.speed = min(self.speed, self.max_speed)
+		
+	
+		#self.x += self.dx
+		#self.y += self.dy
+		#self.dy += Gravity
 
 		self.rect = self.rect.move(
 			self.speed*d.x,
 			self.speed*d.y
 			)
+		
+		
+		
+		
+	#def jump(self):
+		#self.speed*d.y
 
-			
-		screen.blit(self.sprite, self.rect)
 
 	
-char = Character("sprites/sprite_juan.png")
 
-running = True
-direccion = pygame.math.Vector2(0,0)
+Gravity = 1
+
+# Create game objects
+#Character = Character (600, 0, 20, 40)
+platforms = []
+platforms.append(Sprite(600, 200, 400,20))
+platforms.append(Sprite(600, 400, 600, 20))
+platforms.append(Sprite(600, 600, 1000, 20))
+platforms.append(Sprite(1000, 500, 100, 200))
+platforms.append(Sprite(200, 500, 100, 200))
 
 
 
-while running:
-
-	screen.fill(white)
-
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT: running = False
-
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_a:
-				direccion.x = -1
-			if event.key == pygame.K_d:
-				direccion.x = 1
-			if event.key == pygame.K_w:
-				direccion.y = -1
-			if event.key == pygame.K_s:
-				direccion.y = 1
-			
-			
-
-		if event.type == pygame.KEYUP:
-			if event.key == pygame.K_a and direccion.x == -1:
-				direccion.x = 0
-			if event.key == pygame.K_d and direccion.x == 1:
-				direccion.x = 0
-			if event.key == pygame.K_w and direccion.y == -1:
-				direccion.y = 0
-			if event.key == pygame.K_s and direccion.y == 1:
-				direccion.y = 0
-
-	char.move(direccion)
-
-	
-	pygame.display.update()
-	clock.tick(45)
-
-pygame.quit()
