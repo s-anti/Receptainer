@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, os
 from colors import *
 
 
@@ -14,8 +14,18 @@ class Sprite:
 		self.color = red
 		self.friction = 0,9
 
+
+
+
 class Character:
 	def __init__(self, sprite):
+		
+		# TODO animación
+		# images = []
+		# for file_name in os.listdir(sprite):
+		# 	image = pygame.image.load(sprite + os.sep + file_name).convert()
+		# 	images.append(image)	
+
 		self.spriteder = pygame.image.load(sprite)
 		self.spriteizq = pygame.transform.flip(self.spriteder, True, False)
 		self.sprite = self.spriteder

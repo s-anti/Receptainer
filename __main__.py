@@ -4,7 +4,7 @@ from colors import *
 
 pygame.init()
 
-char = Character("sprites/sprite_juan.png")
+char = Character("sprites/Juan_animado/sprite_3.png")
 
 fondo = pygame.image.load("sprites/fondo.png")
 
