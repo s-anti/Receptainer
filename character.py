@@ -27,12 +27,14 @@ class Character:
 		# 	images.append(image)
 
 		self.spriteder = pygame.image.load(sprite)
+		self.spriteder = pygame.transform.scale(self.spriteder, (100, 100))
 		self.spriteizq = pygame.transform.flip(self.spriteder, True, False)
 		self.sprite = self.spriteder
 		self.rect = self.sprite.get_rect()
 		self.speed = 0
 		self.acceleration = 3
-		
+		self.arma = None
+
 		self.global_position = pygame.Vector2(0,0)
 
 		self.max_speed = 14
@@ -66,7 +68,8 @@ class Character:
 	def draw(self, pos, surface):
 		surface.blit(self.sprite, self.rect)
 		
-		
+	def enchufar_arma(self, arma):
+		self.arma = arma	
 	#def jump(self):
 		#self.speed*d.y
 
