@@ -1,20 +1,23 @@
 import pygame
 from character import Character
+from camera import Camera
 from colors import *
+
 
 pygame.init()
 
+width, height = 1500 , 800                          
+screen = pygame.display.set_mode((width, height))   # LA PANTALLA
+pygame.display.set_caption("Personaje")             # Titulo
+
 char = Character("sprites/Juan_animado/sprite_3.png")
+cam = Camera((width, height))
 
 fondo = pygame.image.load("sprites/fondo.png")
 
 running = True
 direccion = pygame.math.Vector2(0,0)
 
-# TODO: eliminar, uso exclusivo de prueba, manejar desde main o cÃ¡mara
-width, height = 1500 , 800                          
-screen = pygame.display.set_mode((width, height))   # LA PANTALLA
-pygame.display.set_caption("Personaje")             # Titulo
 
 clock = pygame.time.Clock()
 
@@ -36,8 +39,6 @@ while running:
 				direccion.y = -1
 			if event.key == pygame.K_s:
 				direccion.y = 1
-			
-			
 
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_a and direccion.x == -1:
@@ -49,9 +50,9 @@ while running:
 			if event.key == pygame.K_s and direccion.y == 1:
 				direccion.y = 0
 
-	char.move(direccion)
-
-	screen.blit(char.sprite, char.rect)
+	char.move_global(direccion)
+	char.draw(0,screen)
+	cam.update((width/2, height/2), [char])
 	
 	pygame.display.update()
 	clock.tick(45)

@@ -1,11 +1,12 @@
 import pygame
 
-class camera():
-    def __init__(self, target):
-        self.x = target.x
-        self.y = target.y
 
-    def update(self,target):
-        self.x = target.x
-        self.y = target.y
+class Camera():
+    # TODO: hacer que funcione bien correctamente 
+    def __init__(self, size):
+        self.position = pygame.Vector2(0,0)
+        self.size = size
+
+    def update(self, position, elemtents: list = []):
+        self.position = position
 #eloctaselacomecuadrada

@@ -33,10 +33,12 @@ class Character:
 		self.speed = 0
 		self.acceleration = 3
 		
+		self.global_position = pygame.Vector2(0,0)
+
 		self.max_speed = 14
 		
 
-	def move(self, d):
+	def move_global(self, d):
 		
 		# TODO limite del techo y piso 
 
@@ -55,12 +57,14 @@ class Character:
 		#self.y += self.dy
 		#self.dy += Gravity
 
-		self.rect = self.rect.move(
+		self.global_position += (
 			self.speed*d.x,
 			self.speed*d.y
 			)
+		self.rect.center = self.global_position
 		
-		
+	def draw(self, pos, surface):
+		surface.blit(self.sprite, self.rect)
 		
 		
 	#def jump(self):
