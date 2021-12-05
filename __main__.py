@@ -1,6 +1,4 @@
-import pygame
-from pygame import surface
-from pygame.constants import USEREVENT
+import pygame, random
 from character import Character
 from camera import Camera
 from arma import Arma
@@ -19,7 +17,7 @@ player_can_shoot = True
 
 rifle1 = Arma(
 	"sprites/Arma/Armas del zip del facu/Rifle de asalto1.png",
-	cadencia = 200
+	cadencia = 50, dispersion= 5
 )
 
 escopeta_falopa = Arma(
@@ -93,13 +91,18 @@ while running:
 	screen.blit(rifle1.temp_sprite, rifle1.temp_rect)
 	
 	if player_shooting:
+		
 		if player_can_shoot:
-			b = rifle1.shoot()
+			angle = random.uniform(
+				rifle1.angle - rifle1.dispersion,
+				rifle1.angle + rifle1.dispersion)
+			b = rifle1.shoot(angle)
 			b["birth"] = time
 			bullets.append(b)
 			player_can_shoot = False
-			pygame.time.set_timer(USEREVENT, rifle1.rate, 1)
+			pygame.time.set_timer(pygame.USEREVENT, rifle1.rate, 1)
 		
+
 	bullets = rifle1.update_bullets(screen, bullets, time)
 
 	cam.update((width/2, height/2), [char])

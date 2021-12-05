@@ -3,10 +3,10 @@ import pygame, math
 class Arma:
 	def __init__(
 			self,
-			path: str = "",			cadencia: float = 1,
+			path: str = "",			cadencia: float = 200,
 			t_recarga: float = 4.5,	cargador: int = 15,
-			dispersion: float = 5,	daño: float = 10,
-			tipo: str = "",			velocidad_tiro: int = 5,
+			dispersion: int = 20,	daño: float = 10,
+			tipo: str = "",			velocidad_tiro: int = 15,
 			bala_path: str = "sprites/Arma/bala.png"
 		):
 		
@@ -49,13 +49,13 @@ class Arma:
 		self.angle = angle
 		
 		
-	def shoot(self):
-		angle = self.angle #+ desviacion
+	def shoot(self, angle):
+		
 		sprite = pygame.transform.rotate(self.bala_sprite, angle)
 		
 		w = self.spriteder.get_width()/2
-		posx = self.temp_rect.centerx - w * math.cos(math.radians(self.angle))
-		posy = self.temp_rect.centery + w * math.sin(math.radians(self.angle))
+		posx = self.temp_rect.centerx - w * math.cos(math.radians(angle))
+		posy = self.temp_rect.centery + w * math.sin(math.radians(angle))
 		
 		rect = sprite.get_rect(center = (posx, posy))
 		
@@ -72,7 +72,7 @@ class Arma:
 			
 			# La saco de la lista de actualización para el frame
 			# que viene por que si no había un jitter feo
-			if time - bullet["birth"] > 4000: #timepo de vida de la bala:
+			if time - bullet["birth"] > 8000: #timepo de vida de la bala:
 				bullets.remove(bullet)
 			
 		return bullets
