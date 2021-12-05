@@ -26,19 +26,15 @@ class Arma:
 
 	def update(self, pos, target):
 		
+		# Esta linea es secuestrada de google pero cambié dos numeros y anda joya, no la toquen
 		angle = 180-math.atan2(target[1]-pos[1],target[0]-pos[0])*180/math.pi
 
 		if angle > 90 and angle < 270:
 			self.sprite = self.spriteder
-			
 		else: 
 			self.sprite = self.spriteizq
 			
-
-		
-		
 		self.temp_sprite = pygame.transform.rotate(self.sprite, angle)
-
 		self.temp_rect = self.temp_sprite.get_rect(center = pos)
 
 		
