@@ -1,12 +1,20 @@
 import pygame, math
 
 class Arma:
-	def __init__(self, path, cadencia, t_recarga, cargador, dispersion, daño, tipo, bala_path =  "sprites/Arma/bala.png"):
+	def __init__(
+			self,
+			path: str = "",			cadencia: float = 1,
+			t_recarga: float = 4.5,	cargador: int = 15,
+			dispersion: float = 5,	daño: float = 10,
+			tipo: str = "",			velocidad_tiro: int = 5,
+			bala_path: str = "sprites/Arma/bala.png"
+		):
+		
 		self.spriteizq = pygame.image.load(path)
 		self.spriteder  = pygame.transform.flip(self.spriteizq, False, True)
 		self.sprite = self.spriteder
-		
-		
+		self.angle = 0
+
 		self.bala_sprite = pygame.image.load(bala_path)
 
 		self.rate = cadencia
@@ -14,6 +22,8 @@ class Arma:
 		self.cargador = cargador
 		self.dispersion = dispersion
 		self.daño = daño
+		self.v_tiro = velocidad_tiro
+
 
 		#if tipo == "Escopeta":
 			#cadencia == 0.75
@@ -36,9 +46,33 @@ class Arma:
 			
 		self.temp_sprite = pygame.transform.rotate(self.sprite, angle)
 		self.temp_rect = self.temp_sprite.get_rect(center = pos)
-
+		self.angle = angle
 		
 		
 	def shoot(self):
-		#screen.blit(self.bala_sprite
-		pass
+		angle = self.angle #+ desviacion
+		sprite = pygame.transform.rotate(self.bala_sprite, angle)
+		
+		w = self.spriteder.get_width()/2
+		posx = self.temp_rect.centerx - w * math.cos(math.radians(self.angle))
+		posy = self.temp_rect.centery + w * math.sin(math.radians(self.angle))
+		
+		rect = sprite.get_rect(center = (posx, posy))
+		
+		return {"sprite": sprite, "rect": rect, "angle": angle, "birth": 0}
+
+
+	def update_bullets(self, surface, bullets, time):
+		
+		for bullet in bullets:
+			bullet["rect"].x -= self.v_tiro * math.cos(math.radians(bullet["angle"]))
+			bullet["rect"].y += self.v_tiro * math.sin(math.radians(bullet["angle"]))
+
+			surface.blit(bullet["sprite"], bullet["rect"])
+			
+			# La saco de la lista de actualización para el frame
+			# que viene por que si no había un jitter feo
+			if time - bullet["birth"] > 4000: #timepo de vida de la bala:
+				bullets.remove(bullet)
+			
+		return bullets

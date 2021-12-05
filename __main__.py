@@ -1,5 +1,6 @@
 import pygame
 from pygame import surface
+from pygame.constants import USEREVENT
 from character import Character
 from camera import Camera
 from arma import Arma
@@ -13,10 +14,13 @@ screen = pygame.display.set_mode((width, height))   # LA PANTALLA
 pygame.display.set_caption("Tsteo")             # Titulo
 
 char = Character("sprites/Juan_animado/sprite_3.png")
+player_shooting = False
+player_can_shoot = True
+
 rifle1 = Arma(
 	"sprites/Arma/Armas del zip del facu/Rifle de asalto1.png",
-	5, 3, 30, 20, 10, "Shifle",
-	)
+	cadencia = 200
+)
 
 escopeta_falopa = Arma(
 	"sprites/Arma/Armas del zip del facu/sprite_0.png",
@@ -30,10 +34,14 @@ fondo = pygame.image.load("sprites/fondo.png")
 running = True
 direccion = pygame.math.Vector2(0,0)
 
+bullets = []
+tiempo_de_vida_de_la_bala_en_milis = 2000
 
 clock = pygame.time.Clock()
 
 while running:
+
+	time = pygame.time.get_ticks()
 
 	screen.fill(white)
 
@@ -41,7 +49,6 @@ while running:
 
 	mouse_pos = pygame.mouse.get_pos()
 	
-
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT: running = False
 
@@ -67,14 +74,33 @@ while running:
 
 		#if event.type == pygame.mouse.get_pressed:
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			rifle1.shoot()
+			if pygame.mouse.get_pressed()[0] == True:
+				player_shooting = True
+			#elif pygame.mouse.get_pressed()[2] == True:
+				#[2] es el derecho, el [1] es la rueda
+		if event.type == pygame.MOUSEBUTTONUP:
+			if pygame.mouse.get_pressed()[0] == False:
+				player_shooting = False
+
+		if event.type == pygame.USEREVENT:
+			player_can_shoot = True
 	
 	
 	char.move_global(direccion)
-	char.draw(0,screen)
+	char.draw(screen)
 
 	rifle1.update(char.rect.center, mouse_pos)
 	screen.blit(rifle1.temp_sprite, rifle1.temp_rect)
+	
+	if player_shooting:
+		if player_can_shoot:
+			b = rifle1.shoot()
+			b["birth"] = time
+			bullets.append(b)
+			player_can_shoot = False
+			pygame.time.set_timer(USEREVENT, rifle1.rate, 1)
+		
+	bullets = rifle1.update_bullets(screen, bullets, time)
 
 	cam.update((width/2, height/2), [char])
 	
