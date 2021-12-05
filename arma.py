@@ -37,8 +37,10 @@ class Arma:
 
 		self.rect.center = position
 
-		self.temp_rect.centerx = position[0]
-		self.temp_rect.centery = position[1] + sprite.get_size()[1]/2
+		self.temp_rect = position
+
+		# self.temp_rect.centerx = position[0]
+		# self.temp_rect.centery = position[1] + sprite.get_size()[1]/2
 		
 	def shoot(self):
 		#screen.blit(self.bala_sprite

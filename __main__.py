@@ -13,7 +13,8 @@ pygame.display.set_caption("Tsteo")             # Titulo
 
 char = Character("sprites/Juan_animado/sprite_3.png")
 rifle1 = Arma(
-	"sprites/Arma/Armas del zip del facu/Rifle de asalto1.png",
+	"sprites/Multiples changos/sprite_22.png",
+	#"sprites/Arma/Armas del zip del facu/Rifle de asalto1.png",
 	5, 3, 30, 20, 10, "Shifle",
 	)
 
