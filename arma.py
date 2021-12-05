@@ -1,10 +1,11 @@
-import pygame
+import pygame, math
 
 class Arma:
 	def __init__(self, path, cadencia, t_recarga, cargador, dispersion, daño, tipo, bala_path =  "sprites/Arma/bala.png"):
-		self.spriteder = pygame.image.load(path)
-		self.spriteizq  = pygame.transform.flip(self.spriteder, False, True)
-		self.rect = self.spriteder.get_rect()
+		self.spriteizq = pygame.image.load(path)
+		self.spriteder  = pygame.transform.flip(self.spriteizq, False, True)
+		self.sprite = self.spriteder
+		
 		
 		self.bala_sprite = pygame.image.load(bala_path)
 
@@ -23,24 +24,24 @@ class Arma:
 			# TODO: Hacer que sea una escopeta
 			#pass
 
-	def update(self, rotation, position):
-	
-		if abs(rotation) > 90:
-			sprite = self.spriteizq
-			
-		else:
-			sprite = self.spriteder
-			
+	def update(self, pos, target):
 		
-		self.temp_sprite = pygame.transform.rotate(sprite, rotation)
-		self.temp_rect = self.temp_sprite.get_rect(center = sprite.get_rect(center = (position)).center)
+		angle = 180-math.atan2(target[1]-pos[1],target[0]-pos[0])*180/math.pi
 
-		self.rect.center = position
+		if angle > 90 and angle < 270:
+			self.sprite = self.spriteder
+			
+		else: 
+			self.sprite = self.spriteizq
+			
 
-		self.temp_rect = position
+		
+		
+		self.temp_sprite = pygame.transform.rotate(self.sprite, angle)
 
-		# self.temp_rect.centerx = position[0]
-		# self.temp_rect.centery = position[1] + sprite.get_size()[1]/2
+		self.temp_rect = self.temp_sprite.get_rect(center = pos)
+
+		
 		
 	def shoot(self):
 		#screen.blit(self.bala_sprite
