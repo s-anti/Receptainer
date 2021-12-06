@@ -1,6 +1,6 @@
 import pygame, random
 from character import Character
-from camera import Camera
+#from camera import Camera
 from arma import Arma
 from colors import *
 
@@ -10,6 +10,8 @@ pygame.init()
 width, height = 1500 , 800                          
 screen = pygame.display.set_mode((width, height))   # LA PANTALLA
 pygame.display.set_caption("Tsteo")             # Titulo
+
+fondo = pygame.image.load("sprites/fondo.png")
 
 char = Character("sprites/Juan_animado/sprite_3.png")
 player_shooting = False
@@ -25,15 +27,17 @@ escopeta_falopa = Arma(
 	3, 2, 1, 7, 9, "EZ_Copeta"
 )
 
-cam = Camera((width, height))
+#cam = Camera((width, height))
 
-fondo = pygame.image.load("sprites/fondo.png")
 
 running = True
 direccion = pygame.math.Vector2(0,0)
 
 bullets = []
-tiempo_de_vida_de_la_bala_en_milis = 2000
+
+
+dibujables = [fondo, char, rifle1]
+
 
 clock = pygame.time.Clock()
 
@@ -43,7 +47,7 @@ while running:
 
 	screen.fill(white)
 
-	screen.blit(fondo, (350, 0))
+	
 
 	mouse_pos = pygame.mouse.get_pos()
 	
@@ -85,10 +89,10 @@ while running:
 	
 	
 	char.move_global(direccion)
-	char.draw(screen)
+	#screen.blit(char.sprite, char.rect)
 
 	rifle1.update(char.rect.center, mouse_pos)
-	screen.blit(rifle1.temp_sprite, rifle1.temp_rect)
+	#screen.blit(rifle1.sprite, rifle1.rect)
 	
 	if player_shooting:
 		
@@ -103,10 +107,18 @@ while running:
 			pygame.time.set_timer(pygame.USEREVENT, rifle1.rate, 1)
 		
 
-	bullets = rifle1.update_bullets(screen, bullets, time)
+	bullets = rifle1.update_bullets(bullets, time)
 
-	cam.update((width/2, height/2), [char])
+	#if not bullets in dibujables: dibujables.append(bullets)
+
+	#for i in bullets: screen.blit(i["sprite"], i["rect"])
+
+	#cam.update(char.rect.center, screen, dibujables)
 	
+	char.draw(screen, 0)
+	rifle1.draw(screen, 0)
+	rifle1.draw_bullets(screen, 0, bullets)
+
 	pygame.display.update()
 	clock.tick(45)
 

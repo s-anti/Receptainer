@@ -13,6 +13,7 @@ class Arma:
 		self.spriteizq = pygame.image.load(path)
 		self.spriteder  = pygame.transform.flip(self.spriteizq, False, True)
 		self.sprite = self.spriteder
+		self.rect = self.sprite.get_rect()
 		self.angle = 0
 
 		self.bala_sprite = pygame.image.load(bala_path)
@@ -44,8 +45,8 @@ class Arma:
 		else: 
 			self.sprite = self.spriteizq
 			
-		self.temp_sprite = pygame.transform.rotate(self.sprite, angle)
-		self.temp_rect = self.temp_sprite.get_rect(center = pos)
+		self.sprite = pygame.transform.rotate(self.sprite, angle)
+		self.rect = self.sprite.get_rect(center = pos)
 		self.angle = angle
 		
 		
@@ -54,21 +55,21 @@ class Arma:
 		sprite = pygame.transform.rotate(self.bala_sprite, angle)
 		
 		w = self.spriteder.get_width()/2
-		posx = self.temp_rect.centerx - w * math.cos(math.radians(angle))
-		posy = self.temp_rect.centery + w * math.sin(math.radians(angle))
+		posx = self.rect.centerx - w * math.cos(math.radians(angle))
+		posy = self.rect.centery + w * math.sin(math.radians(angle))
 		
 		rect = sprite.get_rect(center = (posx, posy))
 		
 		return {"sprite": sprite, "rect": rect, "angle": angle, "birth": 0}
 
 
-	def update_bullets(self, surface, bullets, time):
+	def update_bullets(self, bullets, time):
 		
 		for bullet in bullets:
 			bullet["rect"].x -= self.v_tiro * math.cos(math.radians(bullet["angle"]))
 			bullet["rect"].y += self.v_tiro * math.sin(math.radians(bullet["angle"]))
 
-			surface.blit(bullet["sprite"], bullet["rect"])
+
 			
 			# La saco de la lista de actualización para el frame
 			# que viene por que si no había un jitter feo
@@ -76,3 +77,9 @@ class Arma:
 				bullets.remove(bullet)
 			
 		return bullets
+	
+	def draw(self, screen, cam_pos):
+		screen.blit(self.sprite, self.rect)
+	
+	def draw_bullets(self, screen, cam_pos, bullets):
+		for i in bullets: screen.blit(i["sprite"], i["rect"])

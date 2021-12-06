@@ -65,8 +65,9 @@ class Character:
 			)
 		self.rect.center = self.global_position
 		
-	def draw(self, surface):
-		surface.blit(self.sprite, self.rect)
+	
+	def draw(self, screen, cam_pos):
+		screen.blit(self.sprite, self.rect)
 		
 	def enchufar_arma(self, arma):
 		self.arma = arma	

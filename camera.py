@@ -7,6 +7,16 @@ class Camera():
         self.position = pygame.Vector2(0,0)
         self.size = size
 
-    def update(self, position, elemtents: list = []):
+    def update(self, position, screen, elements: list = []):
         self.position = position
+
+        for element in elements:
+            if isinstance(element, pygame.Surface):
+                screen.blit(element, (0,0))
+            
+            elif isinstance(element, list):
+                for bullet in element: screen.blit(bullet["sprite"], bullet["rect"])
+        else:
+
+
 #eloctaselacomecuadrada
