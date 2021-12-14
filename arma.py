@@ -49,6 +49,8 @@ class Arma:
 		self.rect = self.sprite.get_rect(center = pos)
 		self.angle = angle
 		
+	def draw(self, screen, cam_pos):
+		screen.blit(self.sprite, self.rect)
 		
 	def shoot(self, angle):
 		
@@ -69,8 +71,6 @@ class Arma:
 			bullet["rect"].x -= self.v_tiro * math.cos(math.radians(bullet["angle"]))
 			bullet["rect"].y += self.v_tiro * math.sin(math.radians(bullet["angle"]))
 
-
-			
 			# La saco de la lista de actualización para el frame
 			# que viene por que si no había un jitter feo
 			if time - bullet["birth"] > 8000: #timepo de vida de la bala:
@@ -78,8 +78,6 @@ class Arma:
 			
 		return bullets
 	
-	def draw(self, screen, cam_pos):
-		screen.blit(self.sprite, self.rect)
 	
-	def draw_bullets(self, screen, cam_pos, bullets):
-		for i in bullets: screen.blit(i["sprite"], i["rect"])
+	def draw_bullets(self, screen, cX, cY, bullets, wh):
+		for i in bullets: screen.blit(i["sprite"], (i["rect"].x-wh[0]/2-cX, i["rect"].y-wh[1]/2-cY))

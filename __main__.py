@@ -7,7 +7,7 @@ from colors import *
 
 pygame.init()
 
-width, height = 1500 , 800                          
+width, height = 1500, 800                          
 screen = pygame.display.set_mode((width, height))   # LA PANTALLA
 pygame.display.set_caption("Tsteo")             # Titulo
 
@@ -41,6 +41,9 @@ dibujables = [fondo, char, rifle1]
 
 clock = pygame.time.Clock()
 
+#Temp:
+camaraX = camaraY = 0
+
 while running:
 
 	time = pygame.time.get_ticks()
@@ -57,12 +60,14 @@ while running:
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_a:
 				direccion.x = -1
-			if event.key == pygame.K_d:
+			elif event.key == pygame.K_d:
 				direccion.x = 1
-			if event.key == pygame.K_w:
+			elif event.key == pygame.K_w:
 				direccion.y = -1
-			if event.key == pygame.K_s:
+			elif event.key == pygame.K_s:
 				direccion.y = 1
+
+			
 
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_a and direccion.x == -1:
@@ -88,23 +93,26 @@ while running:
 			player_can_shoot = True
 	
 	
-	char.move_global(direccion)
+	char.move(direccion)
+	camaraX, camaraY = char.rect.topleft
+	
+
 	#screen.blit(char.sprite, char.rect)
+
+	
 
 	rifle1.update(char.rect.center, mouse_pos)
 	#screen.blit(rifle1.sprite, rifle1.rect)
 	
-	if player_shooting:
-		
-		if player_can_shoot:
-			angle = random.uniform(
-				rifle1.angle - rifle1.dispersion,
-				rifle1.angle + rifle1.dispersion)
-			b = rifle1.shoot(angle)
-			b["birth"] = time
-			bullets.append(b)
-			player_can_shoot = False
-			pygame.time.set_timer(pygame.USEREVENT, rifle1.rate, 1)
+	if player_shooting and player_can_shoot:
+		angle = random.uniform(
+			rifle1.angle - rifle1.dispersion,
+			rifle1.angle + rifle1.dispersion)
+		b = rifle1.shoot(angle)
+		b["birth"] = time
+		bullets.append(b)
+		player_can_shoot = False
+		pygame.time.set_timer(pygame.USEREVENT, rifle1.rate, 1)
 		
 
 	bullets = rifle1.update_bullets(bullets, time)
@@ -115,9 +123,11 @@ while running:
 
 	#cam.update(char.rect.center, screen, dibujables)
 	
-	char.draw(screen, 0)
-	rifle1.draw(screen, 0)
-	rifle1.draw_bullets(screen, 0, bullets)
+	screen.blit(fondo, (0-width/2-camaraX, 0-height/2-camaraY))
+
+	char.draw(screen, camaraX, camaraY)
+	rifle1.draw(screen, (width/2, height/2))
+	rifle1.draw_bullets(screen, camaraX, camaraY, bullets, (width, height))
 
 	pygame.display.update()
 	clock.tick(45)
